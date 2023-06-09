@@ -2,7 +2,7 @@ const KPSDKToken = new Promise((resolve, reject) => {
   // Twitch's client-side device ID generation
   function getUniqueID() {
     return "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx".replace(/x/g, (function () {
-      return (16 * Math.random() | 0).toString(16)
+      return (16 * Math.random() | 0).toString(16);
     }
     )).substring(0, 16);
   }
@@ -37,7 +37,7 @@ const KPSDKToken = new Promise((resolve, reject) => {
     });
 
     if (resp.status !== 200) {
-      throw new Error(`expected http status code 200, got ${resp.status}`)
+      throw new Error(`expected http status code 200, got ${resp.status}`);
     }
 
     return resp.json();
@@ -46,7 +46,7 @@ const KPSDKToken = new Promise((resolve, reject) => {
   function appendScript() {
     const l = document.createElement('script');
     l.addEventListener('error', (e) => {
-      reject(new Error(`loading script "${SCRIPT_SOURCE}"`))
+      reject(new Error(`loading script "${SCRIPT_SOURCE}"`));
     });
     l.src = SCRIPT_SOURCE;
     document.body.appendChild(l);
@@ -61,7 +61,7 @@ const KPSDKToken = new Promise((resolve, reject) => {
 function parseToken(token) {
   const PREFIX = 'v4.public.';
   if (!token.startsWith(PREFIX)) {
-    throw new Error(`excepted token to start with "${PREFIX}": ${token}"`)
+    throw new Error(`excepted token to start with "${PREFIX}": ${token}"`);
   }
 
   let tokenPayloadB64 = token.slice(PREFIX.length).replaceAll('-', '+').replaceAll('_', '/');
