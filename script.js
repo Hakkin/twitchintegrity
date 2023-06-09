@@ -1,3 +1,11 @@
+// Token acquisition flow:
+// 1. Load p.js javascript
+// 2. Wait for `kpsdk-load` event
+// 3. Call `window.KPSDK.configure`
+// 4. Wait for `kpsdk-ready` event
+// 5. Fetch `gql.twitch.tv/integrity` (p.js hijacks `fetch` to add PoW headers)
+// 6. Response should be in `token` field, seems to be "Paseto Version 4" format. We want `is_bad_bot` field in the decoded token to be false.
+
 const KPSDKToken = new Promise((resolve, reject) => {
   // Twitch's client-side device ID generation
   function getUniqueID() {
