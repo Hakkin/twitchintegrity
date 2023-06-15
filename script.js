@@ -74,7 +74,7 @@ function parseToken(token) {
   }
 
   let tokenPayloadB64 = token.slice(PREFIX.length).replaceAll('-', '+').replaceAll('_', '/');
-  tokenPayloadB64 = tokenPayloadB64.padEnd(tokenPayloadB64.length + tokenPayloadB64.length % 4, '=');
+  tokenPayloadB64 = tokenPayloadB64.padEnd(tokenPayloadB64.length + (4 - (tokenPayloadB64.length % 4)) % 4, '=');
 
   const tokenPayload = atob(tokenPayloadB64).slice(0, -64);
 
