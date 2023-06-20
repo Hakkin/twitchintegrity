@@ -70,7 +70,7 @@ const KPSDKToken = new Promise((resolve, reject) => {
 function parseToken(token) {
   const PREFIX = 'v4.public.';
   if (!token.startsWith(PREFIX)) {
-    throw new Error(`excepted token to start with "${PREFIX}": ${token}"`);
+    throw new Error(`expected token to start with "${PREFIX}": ${token}"`);
   }
 
   let tokenPayloadB64 = token.slice(PREFIX.length).replaceAll('-', '+').replaceAll('_', '/');
