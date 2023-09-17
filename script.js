@@ -97,6 +97,9 @@ function parseToken(token) {
 async function main() {
   try {
     const token = await KPSDKToken;
+    if (self !== parent) {
+      parent.postMessage(token, '*');
+    }
     const parsedToken = parseToken(token.token);
     document.getElementById("token").innerText = JSON.stringify(token, null, 2);
     document.getElementById("parsed").innerText = JSON.stringify(parsedToken, null, 2);
