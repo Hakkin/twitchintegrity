@@ -17,7 +17,6 @@ const KPSDKToken = new Promise((resolve, reject) => {
   }
 
   const CLIENT_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko',
-    DEVICE_ID = getUniqueID(),
     SCRIPT_SOURCE = 'https://k.twitchcdn.net/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/p.js';
 
   function configureKPSDK() {
@@ -33,12 +32,15 @@ const KPSDKToken = new Promise((resolve, reject) => {
     window.KPSDK.configure(o);
   }
 
-  async function fetchIntegrity() {
+  async function fetchIntegrity(opts) {
+    opts = opts || {};
+    const headers = {
+      "client-id": opts.client_id || CLIENT_ID,
+      "x-device-id": opts.device_id || getUniqueID(),
+      ...opts.auth_token && { "Authorization": "OAuth " + opts.auth_token },
+    };
     const resp = await fetch("https://gql.twitch.tv/integrity", {
-      "headers": {
-        "client-id": CLIENT_ID,
-        "x-device-id": DEVICE_ID,
-      },
+      "headers": headers,
       "body": null,
       "method": "POST",
       "mode": "cors",
@@ -61,8 +63,19 @@ const KPSDKToken = new Promise((resolve, reject) => {
     document.body.appendChild(l);
   }
 
+  function getOptions() {
+    const url = new URL(location.href);
+    const params = new URLSearchParams(url.hash.slice(1));
+    return {
+      device_id: params.get("device_id"),
+      auth_token: params.get("auth_token"),
+      client_id: params.get("client_id"),
+    };
+  }
+
+  const opts = getOptions();
   document.addEventListener('kpsdk-load', configureKPSDK);
-  document.addEventListener('kpsdk-ready', () => fetchIntegrity().then(resolve, reject));
+  document.addEventListener('kpsdk-ready', () => fetchIntegrity(opts).then(resolve, reject));
   appendScript();
 });
 
